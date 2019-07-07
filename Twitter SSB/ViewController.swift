@@ -7,21 +7,37 @@
 //
 
 import Cocoa
+import WebKit
 
-class ViewController: NSViewController {
-
+class ViewController: NSViewController, WKUIDelegate {
+    
+    var webView: WKWebView!
+    
+    let webUrl = "https://mobile.twitter.com"
+    let webName = "Twitter"
+    
+    override func loadView() {
+        super.loadView()
+        
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let myURL = URL(string:webUrl)
+        let myRequest = URLRequest(url: myURL!)
+        webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Safari/605.1.15"
+        webView.load(myRequest)
     }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        self.view.window?.title = webName
     }
-
-
 }
 
