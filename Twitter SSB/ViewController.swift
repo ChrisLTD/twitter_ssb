@@ -9,7 +9,7 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController, WKUIDelegate {
+class ViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
     
     var webView: WKWebView!
     
@@ -22,6 +22,7 @@ class ViewController: NSViewController, WKUIDelegate {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
+        webView.navigationDelegate = self
         view = webView
     }
     
@@ -39,5 +40,22 @@ class ViewController: NSViewController, WKUIDelegate {
         
         self.view.window?.title = webName
     }
+    
+    // Open external (non-Twitter) links in Safari
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
+        let url = navigationAction.request.url
+        
+        if url?.description.lowercased().range(of: "twitter.com") != nil {
+            // open in app
+            decisionHandler(.allow)
+        } else {
+            // open in Safari
+            decisionHandler(.cancel)
+            NSWorkspace.shared.open(url!)
+        }
+        
+    }
+    
 }
 
