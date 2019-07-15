@@ -45,6 +45,12 @@ class ViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
     // Open external links in Safari
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
+        if navigationAction.navigationType != .linkActivated {
+            // not a click
+            decisionHandler(.allow)
+            return
+        }
+        
         let url = navigationAction.request.url
         
         if url?.description.lowercased().range(of: baseDomain) != nil {
