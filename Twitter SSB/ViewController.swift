@@ -14,6 +14,7 @@ class ViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
     var webView: WKWebView!
     
     let webUrl = "https://mobile.twitter.com"
+    let baseDomain = "twitter.com"
     let webName = "Twitter"
     
     override func loadView() {
@@ -41,12 +42,12 @@ class ViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
         self.view.window?.title = webName
     }
     
-    // Open external (non-Twitter) links in Safari
+    // Open external links in Safari
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
         let url = navigationAction.request.url
         
-        if url?.description.lowercased().range(of: "twitter.com") != nil {
+        if url?.description.lowercased().range(of: baseDomain) != nil {
             // open in app
             decisionHandler(.allow)
         } else {
